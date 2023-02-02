@@ -3,28 +3,24 @@
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines, -1
 
-
 url1 := "https://google.com"
 url2 := "https://bing.com"
 url3 := "https://yahoo.com"
 port := 50000
-
-
-if WinExist("ahk_exe chrome.exe")
-{
-	pageid := chrome.GetID(1,port)
-	Page:=chrome.GetByID(pageid, Port)
-	Page.Evaluate("window.location.href='" url3 "'").value
-	Page.WaitForLoad()
-	MsgBox % Page.Evaluate("document.body.innertext").value
-}
-else
-{
+if !WinExist("ahk_exe chrome.exe") {
 	datadir = chrome.exe --remote-debugging-port=%port% --user-data-dir="%A_ScriptDir%\data"
 	Run %datadir%
 	Sleep 2000
 	Reload
 }
+
+pageid := chrome.GetID(1,port)
+Page:=chrome.GetByID(pageid, Port)
+Page.Evaluate("window.location.href='" url3 "'").value
+Page.WaitForLoad()
+MsgBox % Page.Evaluate("document.body.innertext").value
+
+
 Return
 
 Online(flag=0x40){
